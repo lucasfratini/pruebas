@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Validación de formulario con Validate.js</title>
+    
+    <!-- Enlazar Validate.js desde un servidor externo -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
+<link rel="stylesheet" type="text/css" href="./prueba.css">
+</head>
+<body>
+    <h1>Formulario de ejemplo</h1>
+    <form id="mi-formulario">
+        <input type="text" id="nombre" name="nombre" placeholder="Nombre">
+        <input type="text" id="apellido" name="apellido" placeholder="Apellido">
+        <input type="number" id="edad" name="edad" placeholder="Edad">
+        <input type="email" id="email" name="email" placeholder="Email">
+        <input type="text" id="telefono" name="telefono" placeholder="Teléfono">
+        <input type="submit" value="Enviar">
+      </form>
+      
+      <!-- Agrega el archivo de la librería Validate.js -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
+      
+      <script>
+        // Definir reglas de validación
+        const constraints = {
+          nombre: {
+            presence: true,
+            length: {
+              minimum: 3,
+              maximum: 50,
+              tooShort: "El nombre debe tener al menos %{count} caracteres",
+              tooLong: "El nombre debe tener como máximo %{count} caracteres"
+            }
+          },
+          apellido: {
+            presence: true,
+            length: {
+              minimum: 3,
+              maximum: 50,
+              tooShort: "El apellido debe tener al menos %{count} caracteres",
+              tooLong: "El apellido debe tener como máximo %{count} caracteres"
+            }
+          },
+          edad: {
+            presence: true,
+            numericality: {
+              onlyInteger: true,
+              greaterThan: 0,
+              lessThanOrEqualTo: 150,
+              notValid: "La edad debe ser un número entero válido"
+            }
+          },
+          email: {
+            presence: true,
+            email: {
+              message: "El email debe ser válido"
+            }
+          },
+          telefono: {
+            presence: true,
+            format: {
+              pattern: /^\d{10}$/,
+              message: "El teléfono debe tener 10 dígitos"
+            }
+          }
+        };
+      
+        // Obtener el formulario y agregar el evento de submit
+        const form = document.getElementById('mi-formulario');
+        form.addEventListener('submit', function (event) {
+          event.preventDefault();
+          const errors = validate(form, constraints);
+          if (errors) {
+            mostrarErrores(errors);
+          } else {
+            form.submit(); // Envía el formulario si no hay errores
+          }
+        });
+      
+        // Función para mostrar los errores de validación
+        function mostrarErrores(errors) {
+          const erroresDiv = document.getElementById('errores');
+          erroresDiv.innerHTML = ''; // Limpia los errores anteriores
+          Object.keys(errors).forEach(function (campo) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'validate-error';
+            errorDiv.textContent = errors[campo][0];
+            erroresDiv.appendChild(errorDiv);
+          });
+        }
+      </script>
+      
+          </body>
+
+</html>
